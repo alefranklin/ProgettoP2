@@ -34,14 +34,14 @@ public:
 
     // aggiorno la posizione iniziale
     changePos(RandomPos());
-    
 
-    // aggiorno la visibilità
-    updateVisibility();
   }
-
+  
+  // getSmallMap()
   // moveUP()
   // moveDOWN()
+  // moveLEFT()
+  // moveRIGHT()
   void printMap(){
     for(int x = 0; x < dim; x++){
       for(int y = 0; y < dim; y++){
