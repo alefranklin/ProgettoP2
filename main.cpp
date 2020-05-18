@@ -5,7 +5,7 @@
 #include "mappa.cpp"
 #include "game.cpp"
 using namespace std;
-
+#include <unistd.h>
 #include<ctime>
 
 int main() {
@@ -101,10 +101,10 @@ int main() {
   cout << "numero: " << Randomizer::randomNumberBetween() << endl;
   Randomizer::setup();
   cout << "seed: " << Randomizer::getSeed() << endl;
-  cout << "numero: " << Randomizer::randomNumberBetween() << endl;
-  Randomizer::setSeed(1);
+  cout << "numero: " << Randomizer::randomNumberBetween(0,100) << endl;
+  
   cout << "seed: " << Randomizer::getSeed() << endl;
-  cout << "numero: " << Randomizer::randomNumberBetween() << endl;
+  cout << "numero: " << Randomizer::randomNumberBetween(0,100) << endl;
 
 
   // parte dedicata a mappa
@@ -112,6 +112,12 @@ int main() {
   cout << "TEST DELLE CLASSE MAPPA" << endl;
 
   Map map;
+
+  map.printMap();
+  cout << endl << endl;
+  map.pushTo(Coordinate(1,10));
+
+  map.printMap();
 
   return 0;
 }

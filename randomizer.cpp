@@ -41,7 +41,10 @@ public:
   static void setSeed(unsigned int s) { seed = s; srand(s); } //funzione pronta
 
 
-  static int randomNumberBetween(int min = 0, int max = 1) { return rand()%100; } //fatta a cazzo da definire
+  static int randomNumberBetween(int min = 0, int max = 1) { 
+    setup();
+    return min+(rand()%(max-min+1));
+    } //fatta a cazzo da definire
 
   static Item* getRandomItem(int livello) {/*chiamare casualmente o randomWeapon o randonArmor o potion o altri item istanziabili*/}
 
