@@ -1,11 +1,18 @@
 #include <vector>
 #include "randomizer.cpp"
+#include "entity.cpp"
 using namespace std;
 
 struct Coordinate {
   int x;
   int y;
   Coordinate(int x=0, int y=0): x(x), y(y) {}
+};
+
+struct Tile {
+  Entity* e;
+  bool walkable;
+  Tile(Entity* en = nullptr, bool w = true): e(en), walkable(w){} 
 };
 
 class Map {
@@ -18,9 +25,8 @@ public:
     cout << "dim:" << dim << endl;
 
     // instanzio i vettori della mappa
-    map = vector<vector<char>>(dim, vector<char>(dim, '#'));
-    visible = vector<vector<bool>>(dim, vector<bool>(dim, false));
-
+    map = vector<vector<Tile>>(dim, vector<Tile>(dim, Tile()));
+    map[1][8] = Tile(nullptr,0);
     // costruisco la mappa
     //  -> creo spazi aperti
     //  -> creo corridoi
@@ -28,6 +34,7 @@ public:
 
     // aggiorno la posizione iniziale
     changePos(RandomPos());
+    
 
     // aggiorno la visibilità
     updateVisibility();
@@ -38,38 +45,18 @@ public:
   void printMap(){
     for(int x = 0; x < dim; x++){
       for(int y = 0; y < dim; y++){
-        cout << map[x][y];
+        cout << map[x][y].walkable;
       }
       cout << endl;
     }
   }
 
-  void pushTo(Coordinate cor){
-    if(cor.x < dim && cor.y < dim){     //controllo se le coordinate sono entro i limiti
-      bool trovato = false;             
-      int x = 0, y = 0;                     
-      for(auto i = map.begin(); i != map.end() && !trovato; ++i){     //iteratore
-        if(y == cor.y){
-          for(auto j = i->begin(); j != i->end() && !trovato; ++j){
-            if (x == cor.x){
-              i->insert(j,'@');
-              trovato == true;
-            }
-            x++;
-          }
-        }
-        y++;
-      }
-    } else {
-      cout << "**push coords out of bounds**" << endl;
-    }
-  }   //funzione pronta
+//qui giace la funzione pronta
 
 private:
   static int minDim;
   int dim;
-  vector<vector<char>> map;
-  vector<vector<bool>> visible;
+  vector<vector<Tile>> map;
   Coordinate pos;
 
   Coordinate RandomPos() const {
@@ -80,14 +67,18 @@ private:
     // trovo tutte le possibili posizioni
     for(int x = 0; x < dim; x++){
       for(int y = 0; y < dim; y++){
-        if(map[x][y] == '#'){
+        if(map[x][y].walkable == true){
           possiblePos.push_back(Coordinate(x,y));
+          cout << "porocdio" << endl;
         }
       }
     }
     // ne scelgo una a caso
-    int selected = Randomizer::randomNumberBetween(0, possiblePos.size()-1);
-    return possiblePos[selected];
+    if(possiblePos.size()) {
+       int selected = Randomizer::randomNumberBetween(0, possiblePos.size()-1);
+      return possiblePos[selected];
+    }
+    return Coordinate();   //da fixare  
   }
 
   // cambio la posizione e aggiorno la visibilità

@@ -102,7 +102,7 @@ int main() {
   Randomizer::setup();
   cout << "seed: " << Randomizer::getSeed() << endl;
   cout << "numero: " << Randomizer::randomNumberBetween(0,100) << endl;
-  
+
   cout << "seed: " << Randomizer::getSeed() << endl;
   cout << "numero: " << Randomizer::randomNumberBetween(0,100) << endl;
 
@@ -116,6 +116,7 @@ int main() {
   map.printMap();
   cout << endl << endl;
   map.pushTo(Coordinate(1,10));
+
 
   map.printMap();
 

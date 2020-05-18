@@ -1,7 +1,7 @@
 #ifndef ITEM_H
 #define ITEM_H
 
-#include "test_entity.cpp"
+#include "entity.cpp"
 #include <iostream>
 #include <vector>
 #include <string>

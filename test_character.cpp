@@ -1,7 +1,7 @@
 #ifndef CHARACTER_H
 #define CHARACTER_H
 
-#include "test_entity.cpp"
+#include "entity.cpp"
 #include "test_item.cpp"
 #include <iostream>
 #include <vector>
