@@ -5,15 +5,15 @@
 #include "entity.h"
 
 struct Coordinate {
-  int x;
-  int y;
-  Coordinate(int x=0, int y=0): x(x), y(y) {}
+  int row;
+  int col;
+  Coordinate(int row=0, int col=0): row(row), col(col) {}
 };
 
 struct Tile {
   Entity* e;
   bool walkable;
-  Tile(bool w = true, Entity* en = nullptr): walkable(w), e(en) {}
+  Tile(bool w = false, Entity* en = nullptr): walkable(w), e(en) {}
 };
 
 class Map {
@@ -31,7 +31,7 @@ public://
   Coordinate getPos() const;
   Coordinate getRelativePos() const;
 
-  std::vector<std::vector<Tile>> getSmallMap(int radius);
+  std::vector<std::vector<Tile>> getMiniMap(int radius);
 
   void printMap(std::vector<std::vector<Tile>> m) const;
 //qui giace la funzione pronta

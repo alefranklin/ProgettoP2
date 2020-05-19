@@ -23,17 +23,17 @@ int main() {
   cout << endl << endl;
 
   //Item *a = new Item();         // la classe Item non è istanziabile
-  Item *b = new Weapon(3, 100);
+  //Item *b = new Weapon(3, 100);
   Item *c = new Potion(5, 500);
-  Item *d = new MagicWeapon(10, 100, 300);
+  Item *d = new MagicWeapon(10, 100, 300, 10);
   //Item *e = new MeleeMagic(15, 50, 200);
   Armor *g = new Armor(8, 100);
 
   cout << endl << endl;
 
   //a->use();
-  b->use(T);
-  b->save();
+  //b->use(T);
+  //b->save();
   cout << endl;
 
   c->use(T);
@@ -61,8 +61,8 @@ int main() {
   //oggettoqualunque->save();
   cout << endl;
 
-  cout << "elimino b" << endl;
-  delete b;
+  //cout << "elimino b" << endl;
+  //delete b;
   cout << "elimino c" << endl;
   delete c;
   cout << "elimino d" << endl;
@@ -116,11 +116,11 @@ int main() {
   //map.printMap();
   cout << endl << endl;
 
-  map.setPos(Coordinate(200, 200));
+  map.setPos(Coordinate(10, 10));
   cout << "debug" << endl;
-  cout << "(" << map.getPos().x << "," << map.getPos().y << ")" << endl;
-  map.printMap(map.getSmallMap(5));
-  cout << "(" << map.getRelativePos().x << "," << map.getRelativePos().y << ")" << endl;
+  cout << "(" << map.getPos().row << "," << map.getPos().col << ")" << endl;
+  map.printMap(map.getMiniMap(5));
+  cout << "(" << map.getRelativePos().row << "," << map.getRelativePos().col << ")" << endl;
   //map.printMap();
 
   return 0;
