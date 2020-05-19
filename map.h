@@ -28,10 +28,12 @@ public://
   // moveRIGHT()
 
   void setPos(Coordinate newPos);
+  Coordinate getPos() const;
+  Coordinate getRelativePos() const;
 
-  std::vector<std::vector<Tile>> getSmallMap(int radius) const;
+  std::vector<std::vector<Tile>> getSmallMap(int radius);
 
-  void printMap(std::vector<std::vector<Tile>> m);
+  void printMap(std::vector<std::vector<Tile>> m) const;
 //qui giace la funzione pronta
 
 private:
@@ -39,10 +41,12 @@ private:
   int dim;
   std::vector<std::vector<Tile>> map;
   Coordinate pos;
+  Coordinate relativePos;
 
   Coordinate RandomPos() const;
   // cambio la posizione e aggiorno la visibilità
   void changePos(Coordinate newPos);
+  void changeRelativePos(Coordinate newRelativePos);
 
 };
 
