@@ -118,7 +118,9 @@ int main() {
 
   map.setPos(Coordinate(200, 200));
   cout << "debug" << endl;
+  cout << "(" << map.getPos().x << "," << map.getPos().y << ")" << endl;
   map.printMap(map.getSmallMap(5));
+  cout << "(" << map.getRelativePos().x << "," << map.getRelativePos().y << ")" << endl;
   //map.printMap();
 
   return 0;
