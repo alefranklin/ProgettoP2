@@ -43,7 +43,7 @@ void Magic::save() { cout << "salvo Magic " << getId() << endl; }
 //vector<Attribute<T>> Magic::getAttributes() {}
 
 
-Melee::Melee(int id, int d): Weapon(id, d) {} 
+/*Melee::Melee(int id, int d): Weapon(id, d) {} 
 Melee::~Melee() { cout << "elimino Melee:" << getId() << endl; } 
 void Melee::use() { cout << "sto usando Weapon Melee " << getId() << " infliggi " << getDamage() << " danno" << endl; }
 void Melee::save() { cout << "salvo Weapon Melee" << getId() << endl; }
@@ -54,6 +54,7 @@ MeleeMagic::~MeleeMagic() { cout << "elimino MeleeMagic:" << getId() << endl; }
 void MeleeMagic::use() { cout << "grazie alla tua arma melee magica infliggi " << getDamage() << " danno fisico e " << getEffect() << " danno magico" << endl; } 
 void MeleeMagic::save() { cout << "salvo MeleeMagic " << getId() << endl; }
 //vector<Attribute<T>> MeleeMagic::getAttributes() {}
+*/
 
 
 MagicWeapon::MagicWeapon(int id, int d, int e): Weapon(id, d), Magic(id, e), Item(id) {} 

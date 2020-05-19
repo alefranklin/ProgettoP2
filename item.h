@@ -83,7 +83,7 @@ public:
   //virtual vector<Attribute<T>> getAttributes() {}
 };
 
-class Melee: public Weapon {
+/*class Melee: public Weapon {
 public:
   Melee(int id, int d);
   virtual ~Melee();
@@ -100,7 +100,7 @@ public:
   virtual void use();
   virtual void save();
   //virtual vector<Attribute<T>> getAttributes() {}
-};
+};*/
 
 
 class MagicWeapon: public Weapon, public Magic {

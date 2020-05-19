@@ -34,17 +34,32 @@ void Map::setPos(Coordinate newPos) {
   changePos(newPos);
 }
 
-vector<vector<Tile>> Map::getSmallMap(int radius) const {
+Coordinate Map::getPos() const {
+  return pos;
+}
+
+Coordinate Map::getRelativePos() const {
+  return relativePos;
+}
+
+vector<vector<Tile>> Map::getSmallMap(int radius) {
   vector<vector<Tile>> smallMap(radius*2, vector<Tile>(radius*2, Tile(false)));
 
   for(int x = 0; x < radius*2; x++)
-    for(int y = 0; y < radius*2; y++)
-      smallMap[x][y] = map[ pos.x-radius+x ][ pos.y-radius+y ];
+    for(int y = 0; y < radius*2; y++) {
+      int map_x = pos.x-radius+x;
+      int map_y = pos.y-radius+y;
+      smallMap[x][y] = map[ map_x ][ map_y ];
+
+      // trovo la posizione relativa
+      if(pos.x == map_x && pos.y == map_y)
+        changeRelativePos(Coordinate(x, y));
+    }
 
   return smallMap;
 }
 
-void Map::printMap(vector<vector<Tile>> m){
+void Map::printMap(vector<vector<Tile>> m) const {
   for(int x = 0; x < m.size(); x++){
     for(int y = 0; y < m[x].size(); y++){
       cout << m[x][y].walkable;
@@ -77,4 +92,8 @@ Coordinate Map::RandomPos() const {
 // cambio la posizione e aggiorno la visibilità
 void Map::changePos(Coordinate newPos) {
   pos = newPos;
+}
+
+void Map::changeRelativePos(Coordinate newRelativePos) {
+  relativePos = newRelativePos;
 }
