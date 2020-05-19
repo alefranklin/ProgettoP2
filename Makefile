@@ -1,4 +1,4 @@
-all: program.o
+all: clean program.o
 
 program.o: main.o map.o randomizer.o item.o character.o game.o entity.o
 	g++ main.o map.o randomizer.o item.o character.o game.o entity.o -o program.o
