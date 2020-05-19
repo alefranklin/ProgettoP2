@@ -18,18 +18,17 @@ void Randomizer::setSeed(unsigned int s) { seed = s; srand(s); } //funzione pron
 
 
 int Randomizer::randomNumberBetween(int min, int max) {
-  setup();
   return min+(rand()%(max-min+1));
 } //fatta a cazzo da definire
 
-Item* Randomizer::getRandomItem(int livello) {/*chiamare casualmente o randomWeapon o randonArmor o potion o altri item istanziabili*/}
+//Item* Randomizer::getRandomItem(int livello) {/*chiamare casualmente o randomWeapon o randonArmor o potion o altri item istanziabili*/}
 
-Weapon* Randomizer::getRandomWeapon(int livello) {/*chiamare casualmente uno dei metodi sotto*/}
+//Weapon* Randomizer::getRandomWeapon(int livello) {/*chiamare casualmente uno dei metodi sotto*/}
 //static Weapon* getRandomSword(int livello);
 //static Weapon* getRandomBow(int livello);
 //ecc ecc per ogni arma
 
-Item* Randomizer::getRandomPotion(int livello) {}
+//Item* Randomizer::getRandomPotion(int livello) {}
 
 //static Armor* getRandomArmor(int livello);
 

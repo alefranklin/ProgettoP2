@@ -2,8 +2,7 @@
 #define MAP_H
 
 #include <vector>
-#include "entity.cpp"
-using namespace std;
+#include "entity.h"
 
 struct Coordinate {
   int x;
@@ -18,8 +17,8 @@ struct Tile {
 };
 
 class Map {
-public:
-  Map(int d = minDim);
+public://
+  Map(int d = 0);
 
   // moveUP()
   // moveDOWN()
@@ -28,15 +27,15 @@ public:
 
   void setPos(Coordinate newPos);
 
-  vector<vector<Tile>> getSmallMap(int radius) const;
+  std::vector<std::vector<Tile>> getSmallMap(int radius) const;
 
-  void printMap(vector<vector<Tile>> m, int d);
+  void printMap(std::vector<std::vector<Tile>> m);
 //qui giace la funzione pronta
 
 private:
   static int minDim;
   int dim;
-  vector<vector<Tile>> map;
+  std::vector<std::vector<Tile>> map;
   Coordinate pos;
 
   Coordinate RandomPos() const;

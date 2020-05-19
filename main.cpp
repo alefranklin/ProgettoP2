@@ -1,12 +1,12 @@
 #include <iostream>
-#include "test_item.cpp"
-#include "test_character.cpp"
-#include "randomizer.cpp"
-#include "mappa.h"
-#include "game.cpp"
+#include "item.h"
+#include "character.h"
+#include "randomizer.h"
+#include "map.h"
+#include "game.h"
 using namespace std;
 #include <unistd.h>
-#include<ctime>
+#include <ctime>
 
 int main() {
 
@@ -98,7 +98,7 @@ int main() {
   //cout << Randomizer::
 
   cout << "seed: " << Randomizer::getSeed() << endl;
-  cout << "numero: " << Randomizer::randomNumberBetween() << endl;
+  cout << "numero: " << Randomizer::randomNumberBetween(0, 100) << endl;
   Randomizer::setup();
   cout << "seed: " << Randomizer::getSeed() << endl;
   cout << "numero: " << Randomizer::randomNumberBetween(0,100) << endl;
@@ -111,15 +111,14 @@ int main() {
   cout << endl << endl;
   cout << "TEST DELLE CLASSE MAPPA" << endl;
 
-  Map map;
+  Map map = Map();
 
   //map.printMap();
   cout << endl << endl;
 
   map.setPos(Coordinate(200, 200));
-  map.printMap(map.getSmallMap(10), 10);
-
-
+  cout << "debug" << endl;
+  map.printMap(map.getSmallMap(5));
   //map.printMap();
 
   return 0;

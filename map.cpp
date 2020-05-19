@@ -1,5 +1,5 @@
-#include "mappa.h"
-#include "randomizer.cpp"
+#include "map.h"
+#include "randomizer.h"
 using namespace std;
 
 int Map::minDim = 500;
@@ -7,9 +7,9 @@ int Map::minDim = 500;
 
 Map::Map(int d) {
   //la mappa deve avere una dimensione minima
-  if(dim < d) {
-    dim = d;
-  }
+  if(d < minDim)  dim = minDim;
+  else            dim = d;
+
   cout << "dim:" << dim << endl;
 
   // instanzio i vettori della mappa
@@ -35,18 +35,18 @@ void Map::setPos(Coordinate newPos) {
 }
 
 vector<vector<Tile>> Map::getSmallMap(int radius) const {
-  vector<vector<Tile>> smallMap(radius, vector<Tile>(radius, Tile(false)));
+  vector<vector<Tile>> smallMap(radius*2, vector<Tile>(radius*2, Tile(false)));
 
   for(int x = 0; x < radius*2; x++)
     for(int y = 0; y < radius*2; y++)
-      smallMap[x][y] = map[ (pos.x-radius)+x ][ (pos.y-radius)+y ];
+      smallMap[x][y] = map[ pos.x-radius+x ][ pos.y-radius+y ];
 
   return smallMap;
 }
 
-void Map::printMap(vector<vector<Tile>> m, int d){
-  for(int x = 0; x < d; x++){
-    for(int y = 0; y < d; y++){
+void Map::printMap(vector<vector<Tile>> m){
+  for(int x = 0; x < m.size(); x++){
+    for(int y = 0; y < m[x].size(); y++){
       cout << m[x][y].walkable;
     }
     cout << endl;

@@ -1,8 +1,8 @@
 #ifndef RANDOMIZER_H
 #define RANDOMIZER_H
 
-#include "test_item.cpp"
-#include "test_character.cpp"
+#include "item.h"
+#include "character.h"
 #include <string>
 using namespace std;
 
@@ -37,13 +37,13 @@ public:
 
   static Item* getRandomItem(int livello);
   static Weapon* getRandomWeapon(int livello);
-  //static Weapon* getRandomSword(int livello);
-  //static Weapon* getRandomBow(int livello);
+  static Weapon* getRandomSword(int livello);
+  static Weapon* getRandomBow(int livello);
   //ecc ecc per ogni arma
 
   static Item* getRandomPotion(int livello);
 
-  //static Armor* getRandomArmor(int livello);
+  static Armor* getRandomArmor(int livello);
 
   static Mob* getRandomMob(int livello);
 

@@ -1,18 +1,9 @@
-#ifndef ENTITY_H
-#define ENTITY_H
-
 #include <iostream>
+#include "entity.h"
 using namespace std;
 
-class Entity {
-private:
-  int id;
-protected:
-  Entity(int i = 0): id(i) {}
-  virtual ~Entity() { cout << "elimino Entity:" << getId() << endl; } //=default;
-public:
-  int getId() { return id; }
-  virtual void save() =0;
-};
 
-#endif
+Entity::Entity(int i): id(i) {}
+Entity::~Entity() { cout << "elimino Entity:" << getId() << endl; } //=default;
+int Entity::getId() { return id; }
+
