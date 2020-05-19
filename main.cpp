@@ -26,7 +26,7 @@ int main() {
   Item *b = new Weapon(3, 100);
   Item *c = new Potion(5, 500);
   Item *d = new MagicWeapon(10, 100, 300);
-  Item *e = new MeleeMagic(15, 50, 200);
+  //Item *e = new MeleeMagic(15, 50, 200);
   Armor *g = new Armor(8, 100);
 
   cout << endl << endl;
@@ -44,8 +44,8 @@ int main() {
   d->save();
   cout << endl;
 
-  e->use(T);
-  e->save();
+  //e->use(T);
+  //e->save();
   cout << endl;
 
   cout << "il danno era 300 ma grazie alla tua armatura ricevi " << g->absorb(300) << endl;
@@ -57,8 +57,8 @@ int main() {
   oggettoqualunque->save();
   oggettoqualunque = d;
   oggettoqualunque->save();
-  oggettoqualunque = e;
-  oggettoqualunque->save();
+  //oggettoqualunque = e;
+  //oggettoqualunque->save();
   cout << endl;
 
   cout << "elimino b" << endl;
@@ -67,8 +67,8 @@ int main() {
   delete c;
   cout << "elimino d" << endl;
   delete d;
-  cout << "elimino e" << endl;
-  delete e;
+  //cout << "elimino e" << endl;
+  //delete e;
   cout << "elimino g" << endl;
   delete g;
   cout << "fine" << endl;
