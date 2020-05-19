@@ -35,10 +35,22 @@ void Weapon::use() { cout << "sto usando Weapon " << getId() << " infliggi " << 
 void Weapon::save() { cout << "salvo Weapon " << getId() << endl; }
 //vector<Attribute<T>> Weapon::getAttributes() {}
 
-Magic::Magic(int id, int e): Item(id), effect(e) {} 
+Sword::Sword(int id, int d, int r) : Weapon(id, d), range(r), Item(id) {}
+int Sword::getRange() { return range; }
+void Sword::use() { cout << "sto usando SPADA " << endl;}
+
+
+Bow::Bow(int id, int d, int a) : Weapon(id, d), arrows(a), Item(id) {}
+int Bow::getArrow() { return arrows; }
+void Bow::use() { cout << "sto usando ARCO " << endl;}
+
+
+
+Magic::Magic(int id, int e, int m): Item(id), effect(e), mana(m) {} 
 Magic::~Magic() { cout << "elimino Magic:" << getId() << endl; }
-int Magic::getEffect() { return effect; } 
-void Magic::use() { cout << "sto usando Magic " << getId() << " subisci " << effect << " danno" << endl; }
+int Magic::getEffect() { return effect; }
+int Magic::getMana() { return mana; }
+//void Magic::use() { cout << "sto usando Magic " << getId() << " subisci " << effect << " danno" << endl; }
 void Magic::save() { cout << "salvo Magic " << getId() << endl; }
 //vector<Attribute<T>> Magic::getAttributes() {}
 
@@ -57,15 +69,32 @@ void MeleeMagic::save() { cout << "salvo MeleeMagic " << getId() << endl; }
 */
 
 
-MagicWeapon::MagicWeapon(int id, int d, int e): Weapon(id, d), Magic(id, e), Item(id) {} 
+MagicWeapon::MagicWeapon(int id, int d, int e, int m): Weapon(id, d), Magic(id, e, m), Item(id) {} 
 MagicWeapon::~MagicWeapon() { cout << "elimino MagicWeapon:" << getId() << endl; } 
-void MagicWeapon::use() { cout << "grazie alla tua arma magica infliggi un danno doppio!" << endl; Weapon::use(); Magic::use(); } 
+void MagicWeapon::use() { 
+  cout << "Arma magica" << endl; 
+  if(100 >= Magic::getMana()){ //**** AGGGIORNARE CON manaPG
+    //settare nuovo mana disponibile nel personaggio
+    Weapon::use();
+    cout << " + infliggi " << Weapon::getDamage()*Magic::getEffect() << " danno magico" << endl;
+  } 
+} 
+//void MagicWeapon::useMana() { cout << " Uso " << Magic::getMana() << " mana" << endl; }
 void MagicWeapon::save() { cout << "salvo MagicWeapon " << getId() << endl; }
 //vector<Attribute<T>> MagicWeapon::getAttributes() {}
 
 Armor::Armor(int id, int a): Item(id), armatura(a) {} 
 Armor::~Armor() { cout << "elimino Armor:" << getId() << endl; }
 int Armor::absorb(int danno) { return (armatura > danno) ? 0 : danno-armatura; } 
-void Armor::use() { } 
+//void Armor::use() { } 
 void Armor::save() { cout << "salvo Armor " << getId() << endl; }
 //vector<Attribute<T>> Armor::getAttributes() {}
+
+
+Chest::Chest(int id, int c): Armor(id, c), Item(id) {}
+Chest::~Chest() { cout << "Elimino CHEST ARMOR: " << getId() << endl; }
+void Chest::save() { cout << "salvo CHEST " << getId() << endl; }
+
+Boots::Boots(int id, int a): Armor(id, a), Item(id) {}
+Boots::~Boots() { cout << "Te buto via e scarpe " << getId() << endl; }
+void Boots::save() { cout << "salvo BOOTS " << getId() << endl; }

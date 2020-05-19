@@ -61,8 +61,9 @@ public:
 class Weapon: virtual public Item {
 private:
   int damage;
-public:
+protected:  
   Weapon(int id, int d);
+public:
   virtual ~Weapon();
   int getDamage();
   virtual void use();
@@ -70,58 +71,78 @@ public:
   //virtual vector<Attribute<T>> getAttributes() {}
 };
 
+class Sword : virtual public Weapon {
+  private:
+    int range;
+  public:
+    Sword(int id, int d, int r);
+    int getRange();
+    virtual void use();
+};
+
+class Bow : virtual public Weapon {
+  private:
+    int arrows;
+  public:
+    Bow(int id, int d, int r);
+    int getArrow();
+    virtual void use();
+};
 
 class Magic: virtual public Item {
 private:
   int effect;
+  int mana;
+protected:
+  Magic(int id, int e, int m);
 public:
-  Magic(int id, int e);
   virtual ~Magic();
   int getEffect();
-  virtual void use();
-  virtual void save();
-  //virtual vector<Attribute<T>> getAttributes() {}
-};
-
-/*class Melee: public Weapon {
-public:
-  Melee(int id, int d);
-  virtual ~Melee();
-  virtual void use();
+  int getMana();
+  //virtual void use();
   virtual void save();
   //virtual vector<Attribute<T>> getAttributes() {}
 
 };
 
-class MeleeMagic: public Melee, public Magic {
-public:
-  MeleeMagic(int id, int d, int e);
-  virtual ~MeleeMagic();
-  virtual void use();
-  virtual void save();
-  //virtual vector<Attribute<T>> getAttributes() {}
-};*/
 
-
-class MagicWeapon: public Weapon, public Magic {
+class MagicWeapon: virtual public Weapon, virtual public Magic {
 public:
-  MagicWeapon(int id, int d, int e);
+  MagicWeapon(int id, int d, int e, int m);
   virtual ~MagicWeapon();
   virtual void use();
   virtual void save();
   //virtual vector<Attribute<T>> getAttributes() {}
 };
 
-class Armor: public Item {
+class Armor: virtual public Item {
 private:
  int armatura;
 public:
  Armor(int id, int a);
  virtual ~Armor();
- int absorb(int danno);
- virtual void use();
+ virtual int absorb(int danno);
+ //virtual void use();
  virtual void save();
  //virtual vector<Attribute<T>> getAttributes() {}
+};
+
+class Chest : virtual public Armor{
+public:
+  Chest(int id, int c);
+  virtual ~Chest();
+  //virtual int absorb(int danno); //eredita da armor
+  //virtual void use();
+  virtual void save();
+  //virtual vector<Attribute<T>> getAttributes() {}
+};
+
+class Boots : virtual public Armor {
+  public:
+    Boots(int id, int a);
+    virtual ~Boots();
+    virtual void save();
+
 };
 
 #endif
