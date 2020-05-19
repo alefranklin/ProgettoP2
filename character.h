@@ -14,7 +14,7 @@ private:
   int vita;
   int mana;
   Weapon* arma;
-  Armor* rmatura;
+  Armor* armatura;
 protected:
   Character(int i, int v, int m);
 public:
