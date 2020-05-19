@@ -20,6 +20,8 @@ class Map {
 public://
   Map(int d = 0);
 
+  //test push con aton
+
   // moveUP()
   // moveDOWN()
   // moveLEFT()
