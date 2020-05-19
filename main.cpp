@@ -2,7 +2,7 @@
 #include "test_item.cpp"
 #include "test_character.cpp"
 #include "randomizer.cpp"
-#include "mappa.cpp"
+#include "mappa.h"
 #include "game.cpp"
 using namespace std;
 #include <unistd.h>
@@ -113,12 +113,14 @@ int main() {
 
   Map map;
 
-  map.printMap();
+  //map.printMap();
   cout << endl << endl;
-  map.pushTo(Coordinate(1,10));
+
+  map.setPos(Coordinate(200, 200));
+  map.printMap(map.getSmallMap(10), 10);
 
 
-  map.printMap();
+  //map.printMap();
 
   return 0;
 }
