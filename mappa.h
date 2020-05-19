@@ -21,6 +21,8 @@ class Map {
 public:
   Map(int d = minDim);
 
+  //test push con aton
+
   // moveUP()
   // moveDOWN()
   // moveLEFT()
