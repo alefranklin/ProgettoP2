@@ -116,12 +116,51 @@ Coordinate Map::RandomPos() const {
 
 // cambio la posizione e aggiorno la visibilità
 void Map::changePos(Coordinate newPos) {
-  map[pos.row][pos.col].walkable = false;
+  map[pos.row][pos.col].walkable = true; // debug
   pos = newPos;
-  map[pos.row][pos.col].walkable = true;
+  map[pos.row][pos.col].walkable = false; // debug
 }
 
 void Map::changeRelativePos(Coordinate newRelativePos) {
   relativePos = newRelativePos;
 }
-//matteo merda
+//alessandro merda
+
+void Map::moveUP() {
+  Coordinate newPos(pos.row-1, pos.col);
+  if(isValid(newPos) && isWalkable(newPos)) changePos(newPos);
+}
+
+void Map::moveDOWN() {
+  Coordinate newPos(pos.row+1, pos.col);
+  if(isValid(newPos) && isWalkable(newPos)) changePos(newPos);
+}
+
+void Map::moveLEFT() {
+  Coordinate newPos(pos.row, pos.col-1);
+  if(isValid(newPos) && isWalkable(newPos)) changePos(newPos);
+}
+
+void Map::moveRIGHT() {
+  Coordinate newPos(pos.row, pos.col+1);
+  if(isValid(newPos) && isWalkable(newPos)) changePos(newPos);
+}
+
+// restituisce la tile corrent in modo da poter controllare esternamente cosa contiene
+// non è const perche Tile potrebbe essere modificato esternamente e a cascata anche getTileIn() non può essere const
+Tile& Map::getCurrentTile() {
+  return getTileIn(pos);
+}
+
+// richiede una posizione valida
+Tile& Map::getTileIn(Coordinate p) {
+  return map[p.row][p.col];
+}
+
+bool Map::isWalkable(Coordinate p) {
+  return getTileIn(p).walkable;
+}
+
+bool Map::isValid(Coordinate p) const {
+  return (p.row < 0 || p.row >= dim || p.col < 0 || p.col >= dim ) ? false : true;
+}

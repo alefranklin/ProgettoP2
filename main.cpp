@@ -123,5 +123,32 @@ int main() {
   cout << "(" << map.getRelativePos().row << "," << map.getRelativePos().col << ")" << endl;
   //map.printMap();
 
+  char move;
+  bool loop = true;
+  while(loop) {
+    cout << "w: UP\ns: DOWN\na: LEFT\nd: RIGHT\nx: EXIT" << endl << "la tua mossa:";
+    cin >> move;
+    switch (move) {
+    case 'w':
+      map.moveUP();
+      break;
+    case 'a':
+      map.moveLEFT();
+      break;
+    case 's':
+      map.moveDOWN();
+      break;
+    case 'd':
+      map.moveRIGHT();
+      break;
+    default:
+      loop = false;
+      break;
+    }
+    //stampo la mappa
+    map.printMap(map.getMiniMap(5));
+    cout << "(" << map.getPos().row << "," << map.getPos().col << ")" << endl;
+  }
+
   return 0;
 }

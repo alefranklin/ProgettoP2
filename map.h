@@ -13,19 +13,18 @@ struct Coordinate {
 struct Tile {
   Entity* e;
   bool walkable;
-  Tile(bool w = false, Entity* en = nullptr): walkable(w), e(en) {}
+  Tile(bool w = true, Entity* en = nullptr): walkable(w), e(en) {}
 };
 
 class Map {
 public://
   Map(int d = 0);
 
-  //test push con aton
-
-  // moveUP()
-  // moveDOWN()
-  // moveLEFT()
-  // moveRIGHT()
+  void moveUP();
+  void moveDOWN();
+  void moveLEFT();
+  void moveRIGHT();
+  Tile& getCurrentTile();
 
   void setPos(Coordinate newPos);
   Coordinate getPos() const;
@@ -47,6 +46,9 @@ private:
   // cambio la posizione e aggiorno la visibilità
   void changePos(Coordinate newPos);
   void changeRelativePos(Coordinate newRelativePos);
+  Tile& getTileIn(Coordinate p);
+  bool isWalkable(Coordinate p);
+  bool isValid(Coordinate p) const;
 
 };
 
