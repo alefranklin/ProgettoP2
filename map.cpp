@@ -2,7 +2,7 @@
 #include "randomizer.h"
 using namespace std;
 
-int Map::minDim = 500;
+int Map::minDim = 80;
 
 
 Map::Map(int d): pos() {
@@ -13,6 +13,8 @@ Map::Map(int d): pos() {
 
   // instanzio i vettori della mappa
   map = vector<vector<Tile>>(dim, vector<Tile>(dim, Tile()));
+
+  map[15][15] = false; // debug
   
   // costruisco la mappa
   //  -> creo spazi aperti
@@ -22,12 +24,9 @@ Map::Map(int d): pos() {
   // aggiorno la posizione iniziale
   changePos(RandomPos());
 
-}
+  printMap(map);  //debug
 
-// moveUP()
-// moveDOWN()
-// moveLEFT()
-// moveRIGHT()
+}
 
 void Map::setPos(Coordinate newPos) {
   changePos(newPos);
@@ -41,12 +40,14 @@ Coordinate Map::getRelativePos() const {
   return relativePos;
 }
 
-vector<vector<Tile>> Map::getMiniMap(int radius) {
+vector<vector<Tile>> Map::getMiniMap(int size) {
 
   // controllo se ho una grandezza sufficiente a creare una minimappa
   // in caso contrario ritorno tutta la mappa
   
-  if (radius*2 > dim) {
+  int half_size = size/2; 
+
+  if (size > dim) {
     changeRelativePos(pos);
     return map;
   }
@@ -54,26 +55,26 @@ vector<vector<Tile>> Map::getMiniMap(int radius) {
   // a questo punto  sono certo che la mappa sia più graande della minimappa
   // quindi posso avere overflow solo su uno dei due lati non su entrambi
 
-  vector<vector<Tile>> miniMap(radius*2, vector<Tile>(radius*2, Tile(false)));
+  vector<vector<Tile>> miniMap(size, vector<Tile>(size, Tile(false)));
 
   int overflow_row = 0;
   int overflow_col = 0;
 
 
   // calcolo overflow row
-  if(pos.row + radius > dim) overflow_row = (pos.row + radius) - dim;
-  if(pos.row - radius < 0) overflow_row = pos.row - radius;
+  if(pos.row + half_size > dim) overflow_row = (pos.row + half_size) - dim;
+  if(pos.row - half_size < 0) overflow_row = pos.row - half_size;
 
 
   //calcolo overflow col
-  if(pos.col + radius > dim) overflow_col = (pos.col + radius) - dim;
-  if(pos.col - radius < 0) overflow_col = pos.col - radius;
+  if(pos.col + half_size > dim) overflow_col = (pos.col + half_size) - dim;
+  if(pos.col - half_size < 0) overflow_col = pos.col - half_size;
 
-  for(int row = 0; row < radius*2; row++)
-    for(int col = 0; col < radius*2; col++) {
+  for(int row = 0; row < size; row++)
+    for(int col = 0; col < size; col++) {
       // clacolo la posizione relativa alla mappa grande
-      int map_row = pos.row - radius + row - overflow_row;
-      int map_col = pos.col - radius + col - overflow_col;
+      int map_row = pos.row - half_size + row - overflow_row;
+      int map_col = pos.col - half_size + col - overflow_col;
       miniMap[row][col] = map[ map_row ][ map_col ];
 
       // trovo la posizione relativa
@@ -116,9 +117,9 @@ Coordinate Map::RandomPos() const {
 
 // cambio la posizione e aggiorno la visibilità
 void Map::changePos(Coordinate newPos) {
-  map[pos.row][pos.col].walkable = true; // debug
+  //map[pos.row][pos.col].walkable = true; // debug
   pos = newPos;
-  map[pos.row][pos.col].walkable = false; // debug
+  //map[pos.row][pos.col].walkable = false; // debug
 }
 
 void Map::changeRelativePos(Coordinate newRelativePos) {
@@ -154,6 +155,7 @@ Tile& Map::getCurrentTile() {
 
 // richiede una posizione valida
 Tile& Map::getTileIn(Coordinate p) {
+  cout << "map " << &map[p.row][p.col] << " walk: " << map[p.row][p.col].walkable << endl; // debug
   return map[p.row][p.col];
 }
 

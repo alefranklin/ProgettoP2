@@ -7,11 +7,12 @@
 #include "item.h"
 class Game {
 public:
+  void move(char m);
 
 private:
   void fight(Character *pg, vector<Character *> enemies);
 private:
   Player *PG;
-  Map *map;
+  Map map;
 };
 #endif

@@ -4,10 +4,12 @@
 #include <vector>
 #include "entity.h"
 
+#include <iostream>  //debug
+
 struct Coordinate {
   int row;
   int col;
-  Coordinate(int row=0, int col=0): row(row), col(col) {}
+  Coordinate(int row=0, int col=0): row(row), col(col) { /*std::cout << "Tile creata" << std::endl; /*debug*/ }
 };
 
 struct Tile {
@@ -17,7 +19,7 @@ struct Tile {
 };
 
 class Map {
-public://
+public:
   Map(int d = 0);
 
   void moveUP();
@@ -30,7 +32,7 @@ public://
   Coordinate getPos() const;
   Coordinate getRelativePos() const;
 
-  std::vector<std::vector<Tile>> getMiniMap(int radius);
+  std::vector<std::vector<Tile>> getMiniMap(int size);
 
   void printMap(std::vector<std::vector<Tile>> m) const;
 //qui giace la funzione pronta

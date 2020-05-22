@@ -111,16 +111,15 @@ int main() {
   cout << endl << endl;
   cout << "TEST DELLE CLASSE MAPPA" << endl;
 
-  Map map = Map();
+  Map map;
 
   //map.printMap();
   cout << endl << endl;
 
-  map.setPos(Coordinate(10, 10));
-  cout << "debug" << endl;
+  map.setPos(Coordinate(10, 490));
   cout << "(" << map.getPos().row << "," << map.getPos().col << ")" << endl;
-  map.printMap(map.getMiniMap(5));
-  cout << "(" << map.getRelativePos().row << "," << map.getRelativePos().col << ")" << endl;
+  map.printMap(map.getMiniMap(11));
+  //cout << "(" << map.getRelativePos().row << "," << map.getRelativePos().col << ")" << endl;
   //map.printMap();
 
   char move;
@@ -129,25 +128,18 @@ int main() {
     cout << "w: UP\ns: DOWN\na: LEFT\nd: RIGHT\nx: EXIT" << endl << "la tua mossa:";
     cin >> move;
     switch (move) {
-    case 'w':
-      map.moveUP();
-      break;
-    case 'a':
-      map.moveLEFT();
-      break;
-    case 's':
-      map.moveDOWN();
-      break;
-    case 'd':
-      map.moveRIGHT();
-      break;
-    default:
-      loop = false;
-      break;
+      case 'w': map.moveUP();     break;
+      case 'a': map.moveLEFT();   break;
+      case 's': map.moveDOWN();   break;
+      case 'd': map.moveRIGHT();  break;
+      default:  loop = false;     break;
     }
     //stampo la mappa
-    map.printMap(map.getMiniMap(5));
+    map.printMap(map.getMiniMap(11));
     cout << "(" << map.getPos().row << "," << map.getPos().col << ")" << endl;
+    Tile &t = map.getCurrentTile(); // debug
+    t.walkable = false; //debug
+    cout << "main " <<  &t << " walk: " << t.walkable << endl; // debug
   }
 
   return 0;

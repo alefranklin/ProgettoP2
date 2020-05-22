@@ -1,7 +1,7 @@
-all: clean program.o
+all: clean program
 
-program.o: main.o map.o randomizer.o item.o character.o game.o entity.o
-	g++ main.o map.o randomizer.o item.o character.o game.o entity.o -o program.o
+program: main.o map.o randomizer.o item.o character.o game.o entity.o
+	g++ main.o map.o randomizer.o item.o character.o game.o entity.o -o program
 
 main.o: main.cpp
 	g++ -c main.cpp
