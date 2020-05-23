@@ -10,6 +10,12 @@
 *.dll
 *.dylib
 
+#debugger
+*.json
+
+#result make program
+program
+
 # Qt-es
 object_script.*.Release
 object_script.*.Debug
