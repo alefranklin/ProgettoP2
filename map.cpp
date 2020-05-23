@@ -45,36 +45,36 @@ vector<vector<Tile>> Map::getMiniMap(int size) {
   // controllo se ho una grandezza sufficiente a creare una minimappa
   // in caso contrario ritorno tutta la mappa
   
-  int half_size = size/2; 
-
   if (size > dim) {
     changeRelativePos(pos);
     return map;
   }
 
-  // a questo punto  sono certo che la mappa sia più graande della minimappa
+  // a questo punto  sono certo che la mappa sia più grande della minimappa
   // quindi posso avere overflow solo su uno dei due lati non su entrambi
 
   vector<vector<Tile>> miniMap(size, vector<Tile>(size, Tile(false)));
 
   int overflow_row = 0;
   int overflow_col = 0;
+  int half_size = size/2; 
 
 
   // calcolo overflow row
-  if(pos.row + half_size > dim) overflow_row = (pos.row + half_size) - dim;
+  if(pos.row + half_size > dim-1) overflow_row = (pos.row + half_size) - (dim-1);
   if(pos.row - half_size < 0) overflow_row = pos.row - half_size;
 
 
   //calcolo overflow col
-  if(pos.col + half_size > dim) overflow_col = (pos.col + half_size) - dim;
+  if(pos.col + half_size > dim-1) overflow_col = (pos.col + half_size) - (dim-1);
   if(pos.col - half_size < 0) overflow_col = pos.col - half_size;
 
   for(int row = 0; row < size; row++)
     for(int col = 0; col < size; col++) {
       // clacolo la posizione relativa alla mappa grande
-      int map_row = pos.row - half_size + row - overflow_row;
+      int map_row = pos.row - half_size + row - overflow_row; /*size=11 h_size=5 ov_row=1 ov_col=1 map_row=79 map_col=79*/
       int map_col = pos.col - half_size + col - overflow_col;
+
       miniMap[row][col] = map[ map_row ][ map_col ];
 
       // trovo la posizione relativa
@@ -83,7 +83,7 @@ vector<vector<Tile>> Map::getMiniMap(int size) {
     }
 
   return miniMap;
-}
+} // funzione pronta
 
 void Map::printMap(vector<vector<Tile>> m) const {
   for(int row = 0; row < m.size(); row++){
@@ -117,15 +117,19 @@ Coordinate Map::RandomPos() const {
 
 // cambio la posizione e aggiorno la visibilità
 void Map::changePos(Coordinate newPos) {
-  //map[pos.row][pos.col].walkable = true; // debug
+  map[pos.row][pos.col].walkable = true; // debug
   pos = newPos;
-  //map[pos.row][pos.col].walkable = false; // debug
+  map[pos.row][pos.col].walkable = false; // debug
 }
 
 void Map::changeRelativePos(Coordinate newRelativePos) {
   relativePos = newRelativePos;
 }
 //alessandro merda
+
+
+// nelle funzioni move isValid() è ridondante in quanto utilizzata anche in isWalkable(),
+// per chiarezza l'abbiamo utilizzata lo stesso nel controllo
 
 void Map::moveUP() {
   Coordinate newPos(pos.row-1, pos.col);
@@ -160,7 +164,7 @@ Tile& Map::getTileIn(Coordinate p) {
 }
 
 bool Map::isWalkable(Coordinate p) {
-  return getTileIn(p).walkable;
+  return (isValid(p)) ? getTileIn(p).walkable: false;
 }
 
 bool Map::isValid(Coordinate p) const {

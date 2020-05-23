@@ -106,6 +106,12 @@ int main() {
   cout << "seed: " << Randomizer::getSeed() << endl;
   cout << "numero: " << Randomizer::randomNumberBetween(0,100) << endl;
 
+  // parte dedicata a game
+  cout << endl << endl;
+  cout << "TEST DELLE CLASSE GAME - TYPE CHECKING" << endl;
+  //Entity *e = new Sword(100, 3, 2);
+  //cout << "item?: " << Game::isItem(e) << endl;
+  cout << " -- SKIP" << endl;
 
   // parte dedicata a mappa
   cout << endl << endl;
@@ -116,7 +122,7 @@ int main() {
   //map.printMap();
   cout << endl << endl;
 
-  map.setPos(Coordinate(10, 490));
+  map.setPos(Coordinate(73, 73));
   cout << "(" << map.getPos().row << "," << map.getPos().col << ")" << endl;
   map.printMap(map.getMiniMap(11));
   //cout << "(" << map.getRelativePos().row << "," << map.getRelativePos().col << ")" << endl;
@@ -137,9 +143,9 @@ int main() {
     //stampo la mappa
     map.printMap(map.getMiniMap(11));
     cout << "(" << map.getPos().row << "," << map.getPos().col << ")" << endl;
-    Tile &t = map.getCurrentTile(); // debug
-    t.walkable = false; //debug
-    cout << "main " <<  &t << " walk: " << t.walkable << endl; // debug
+    //Tile &t = map.getCurrentTile(); // debug
+    //t.walkable = false; //debug
+    //cout << "main " <<  &t << " walk: " << t.walkable << endl; // debug
   }
 
   return 0;
