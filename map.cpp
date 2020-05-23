@@ -13,8 +13,6 @@ Map::Map(int d): pos() {
 
   // instanzio i vettori della mappa
   map = vector<vector<Tile>>(dim, vector<Tile>(dim, Tile()));
-
-  map[15][15] = false; // debug
   
   // costruisco la mappa
   //  -> creo spazi aperti
@@ -88,7 +86,8 @@ vector<vector<Tile>> Map::getMiniMap(int size) {
 void Map::printMap(vector<vector<Tile>> m) const {
   for(int row = 0; row < m.size(); row++){
     for(int col = 0; col < m[row].size(); col++){
-      cout << m[row][col].walkable;
+      if(row == relativePos.row && col == relativePos.col) cout << "#";
+      else cout << m[row][col].walkable;
     }
     cout << endl;
   }
@@ -117,9 +116,7 @@ Coordinate Map::RandomPos() const {
 
 // cambio la posizione e aggiorno la visibilità
 void Map::changePos(Coordinate newPos) {
-  map[pos.row][pos.col].walkable = true; // debug
   pos = newPos;
-  map[pos.row][pos.col].walkable = false; // debug
 }
 
 void Map::changeRelativePos(Coordinate newRelativePos) {
@@ -159,7 +156,6 @@ Tile& Map::getCurrentTile() {
 
 // richiede una posizione valida
 Tile& Map::getTileIn(Coordinate p) {
-  cout << "map " << &map[p.row][p.col] << " walk: " << map[p.row][p.col].walkable << endl; // debug
   return map[p.row][p.col];
 }
 

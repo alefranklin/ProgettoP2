@@ -143,7 +143,8 @@ int main() {
     //stampo la mappa
     map.printMap(map.getMiniMap(11));
     cout << "(" << map.getPos().row << "," << map.getPos().col << ")" << endl;
-    //Tile &t = map.getCurrentTile(); // debug
+    
+    //Tile& t = map.getCurrentTile(); // debug
     //t.walkable = false; //debug
     //cout << "main " <<  &t << " walk: " << t.walkable << endl; // debug
   }
