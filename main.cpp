@@ -109,8 +109,11 @@ int main() {
   // parte dedicata a game
   cout << endl << endl;
   cout << "TEST DELLE CLASSE GAME - TYPE CHECKING" << endl;
-  //Entity *e = new Sword(100, 3, 2);
-  //cout << "item?: " << Game::isItem(e) << endl;
+  Entity *e = new Sword(100, 3, 2);
+  cout << "item?: " << Game::isItem(e) << endl;
+  cout << "Weapon?: " << Game::isWeapon(e) << endl;
+  cout << "character?: " << Game::isCharacter(e) << endl;
+  cout << "mob?: " << Game::isMob(e) << endl;
   cout << " -- SKIP" << endl;
 
   // parte dedicata a mappa
@@ -122,11 +125,15 @@ int main() {
   //map.printMap();
   cout << endl << endl;
 
-  map.setPos(Coordinate(73, 73));
-  cout << "(" << map.getPos().row << "," << map.getPos().col << ")" << endl;
+  map.setPos(Coordinate(0, 0));
+  cout << map.getPos() << endl;
   map.printMap(map.getMiniMap(11));
   //cout << "(" << map.getRelativePos().row << "," << map.getRelativePos().col << ")" << endl;
   //map.printMap();
+
+  //map.createRectangle(map.getPos(), 4, 5, Desert);
+
+  map.createLine(Coordinate(0,0), Coordinate(5,5), 1, Street);
 
   char move;
   bool loop = true;
@@ -142,7 +149,7 @@ int main() {
     }
     //stampo la mappa
     map.printMap(map.getMiniMap(11));
-    cout << "(" << map.getPos().row << "," << map.getPos().col << ")" << endl;
+    cout << map.getPos() << endl;
     
     //Tile& t = map.getCurrentTile(); // debug
     //t.walkable = false; //debug

@@ -4,18 +4,22 @@
 #include <vector>
 #include "entity.h"
 
-#include <iostream>  //debug
+#include <iostream>
+
+enum Biome {Valley, Desert, Doungeon, Street};
 
 struct Coordinate {
   int row;
   int col;
-  Coordinate(int row=0, int col=0): row(row), col(col) { /*std::cout << "Tile creata" << std::endl; /*debug*/ }
+  Coordinate(int row=0, int col=0): row(row), col(col) {}
+  friend std::ostream& operator<<(std::ostream& out, const Coordinate &c);
 };
 
 struct Tile {
   Entity* e;
   bool walkable;
-  Tile(bool w = true, Entity* en = nullptr): walkable(w), e(en) {}
+  Biome biome;
+  Tile(bool w = true, Biome b = Valley, Entity* en = nullptr): walkable(w), biome(b), e(en) {}
 };
 
 class Map {
@@ -28,7 +32,12 @@ public:
   void moveRIGHT();
   Tile& getCurrentTile();
 
-  void setPos(Coordinate newPos);
+  void createCircle(Coordinate center, int radius, Biome b); // va messa su private
+  void createRectangle(Coordinate center, int width, int height, Biome b); // va messa su private
+  void createLine(Coordinate start, Coordinate end, int thickness, Biome b); // va messa su private
+  void Generatemap(); // va messa su private
+
+  bool setPos(Coordinate newPos);
   Coordinate getPos() const;
   Coordinate getRelativePos() const;
 

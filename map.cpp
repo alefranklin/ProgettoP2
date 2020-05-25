@@ -1,8 +1,14 @@
 #include "map.h"
 #include "randomizer.h"
+#include <cmath>
 using namespace std;
 
 int Map::minDim = 80;
+
+ostream& operator<<(ostream& out, const Coordinate &c) {
+  out << "(" << c.row << "," << c.col << ")";
+  return out;
+}
 
 
 Map::Map(int d): pos() {
@@ -22,12 +28,15 @@ Map::Map(int d): pos() {
   // aggiorno la posizione iniziale
   changePos(RandomPos());
 
-  printMap(map);  //debug
-
 }
 
-void Map::setPos(Coordinate newPos) {
-  changePos(newPos);
+// ritorna true se la posizione è stata settata
+// fasle altrimenti 
+bool Map::setPos(Coordinate newPos) {
+  if(isWalkable(newPos)) {
+    changePos(newPos);
+    return true;
+  } else return false;
 }
 
 Coordinate Map::getPos() const {
@@ -160,9 +169,86 @@ Tile& Map::getTileIn(Coordinate p) {
 }
 
 bool Map::isWalkable(Coordinate p) {
-  return (isValid(p)) ? getTileIn(p).walkable: false;
+  return (isValid(p)) ? getTileIn(p).walkable : false;
 }
 
 bool Map::isValid(Coordinate p) const {
   return (p.row < 0 || p.row >= dim || p.col < 0 || p.col >= dim ) ? false : true;
+}
+
+void Map::createCircle(Coordinate center, int radius, Biome b) {
+  /**
+   * controllo tutte le posizioni in una regione grande radius^2 x radius^2 con centro in center
+   * e controllo se fanno parte dell'area utilizzando la formula del cerchio 
+   */
+  // itero nell'area da controllare
+  for(int i = center.row - radius; i <= center.row + radius; i++) {
+    for(int j = center.col - radius; j <= center.col + radius; j++) {
+      
+      // utilizzo l'equazione del cerchio
+      if((i-center.row)*(i-center.row) + (j-center.col)*(j-center.col) <= radius*radius) {
+        // modifico la cella
+        Coordinate p(i,j);
+        if(isValid(p)) {
+          Tile &t = getTileIn(p);
+          t.walkable = true;
+          t.biome = b;
+        }
+      }
+
+    }
+  }
+}
+
+void Map::createRectangle(Coordinate center, int width, int height, Biome b) {
+
+  // itero nell'area da controllare
+  for(int i = 0; i < height; i++) {
+    for(int j = 0; j < width; j++) {
+
+      int row = center.row - (height/2) + i;
+      int col = center.col - (width/2) + j;
+      
+      // modifico la cella
+      Coordinate p(row,col);
+      if(isValid(p)) {
+        Tile &t = getTileIn(p);
+        t.walkable = true;
+        t.biome = b;
+      }
+
+    }
+  }
+
+}
+
+void Map::createLine(Coordinate p1, Coordinate p2, int thickness, Biome b) {
+  int A = p2.col - p1.col; 
+  int B = p1.row - p2.row; 
+  int C = A*(p1.row) + B*(p1.col); 
+
+  if(B<0) 
+  { 
+    cout << "The line passing through points P and Q is: "
+        << A << "x " << B << "y = " << C << endl; 
+  } 
+  else
+  { 
+    cout << "The line passing through points P and Q is: "
+        << A << "x + " << B << "y = " << C << endl; 
+  } 
+}
+
+void Map::Generatemap() {
+  /**
+   * chiama combinazioni casuali di forme geometriche intercconnesse da linee
+   * che si differenziano per biomi
+   * le linee sono le strade
+   * 
+   * si possono fare vallate
+   * 
+   * deserti giganti con oasi in mezzo
+   * 
+   * magari prevedere un modo di generare acqua o lava rendendo decidibile anche il walkable oltre al bioma
+   */
 }
