@@ -1,6 +1,10 @@
 #include "map.h"
 #include "randomizer.h"
 #include <cmath>
+#include <set>
+
+#include "colors.h"
+
 using namespace std;
 
 int Map::minDim = 80;
@@ -97,8 +101,18 @@ vector<vector<Tile>> Map::getMiniMap(int size) {
 void Map::printMap(vector<vector<Tile>> m, Coordinate pos) {
   for(int row = 0; row < m.size(); row++){
     for(int col = 0; col < m[row].size(); col++){
-      if(row == pos.row && col == pos.col) cout << "#";
-      else cout << (m[row][col].walkable) ? "." : " ";
+      if(row == pos.row && col == pos.col) cout << BLUE << "P" << RESET;
+      else if(m[row][col].walkable) {
+        switch (m[row][col].biome)
+        {
+        case Valley:    cout << GREEN << "\"" << RESET;     break;
+        case Desert:    cout << YELLOW << "~" << RESET;     break;
+        case Doungeon:  cout << BOLDBLACK << "x" << RESET;  break;
+        case Street:    cout << WHITE << "=" <<  RESET;     break;
+        case Water:     cout << CYAN << "~" << RESET;       break;
+        default:        cout << "N";                        break;
+        }
+      } else cout << BLACK << "=" << RESET;
     }
     cout << endl;
   }
@@ -134,7 +148,6 @@ void Map::changeRelativePos(Coordinate newRelativePos) {
   relativePos = newRelativePos;
 }
 //alessandro merda
-
 
 // nelle funzioni move isValid() è ridondante in quanto utilizzata anche in isWalkable(),
 // per chiarezza l'abbiamo utilizzata lo stesso nel controllo
@@ -221,7 +234,7 @@ vector<Coordinate> Map::createRectangle(Coordinate center, int width, int height
 }
 
 vector<Coordinate> Map::createLine(Coordinate p1, Coordinate p2, int thickness) {
-  vector<Coordinate> points;
+  vector<Coordinate> line;
 
   // variabili equazione retta
   int A = p2.col - p1.col; 
@@ -233,6 +246,14 @@ vector<Coordinate> Map::createLine(Coordinate p1, Coordinate p2, int thickness) 
 
   for(int r = min(p1.row, p2.row); r <= max(p1.row, p2.row); r++) {
     for(int c = min(p1.col, p2.col); c <= max(p1.col, p2.col); c++) {
+
+      if( (A*r) + (B*c) == C ) {
+          Coordinate p(r,c);
+          if(isValid(p)) line.push_back(p);
+      }
+
+      // forse non serve
+      /*
       if(B<0) {
         // l'equazione è AxBy=C
         if( (A*r) + (B*c) == C ) {
@@ -245,15 +266,38 @@ vector<Coordinate> Map::createLine(Coordinate p1, Coordinate p2, int thickness) 
           Coordinate p(r,c);
           if(isValid(p)) points.push_back(p);
         }
-      }
+      } */
+
+
     }
   }
+
+  // thickness deve essere >= 1
+  if(thickness <= 0) thickness = 1;
+
+  // se la linea è obliqua per potermi muovere devo avere uno spessore almeno di 2
+  if ( ((p1.row != p2.row) or (p1.col != p2.col)) && thickness == 1) thickness = 1;
+
+  // se thickness è 1 allora non devo fare altro
+  if(thickness == 1) return line; 
+
+  // se tickness è > 1 ingrosso la linea
+  vector<Coordinate> points;
+  for(auto it = line.begin(); it != line.end(); ++it) {
+    // creo un quadrato di dimensione thicknessxthickness intorno ad ogni punto della linea
+    vector<Coordinate> v = createRectangle(*it, thickness, thickness);
+    points.insert(points.end(), v.begin(), v.end());
+  }
+
+  // elimino tutti i punti duplicati
+  set<Coordinate> s( points.begin(), points.end() );
+  points.assign( s.begin(), s.end() );
+
   return points;
       
 }
 
 void Map::modifyTile(vector<Coordinate> points, bool w, Biome b) {
-
   for(auto it = points.begin(); it != points.end(); ++it) {
     if(isValid(*it)) {
       Tile &t = getTileIn(*it);
@@ -261,7 +305,9 @@ void Map::modifyTile(vector<Coordinate> points, bool w, Biome b) {
       t.biome = b;
     }
   }
+}
 
+double Map::calcSpawnRate(const Tile& t) const {
 
 }
 

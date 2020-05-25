@@ -12,6 +12,16 @@ struct Coordinate {
   int row;
   int col;
   Coordinate(int row=0, int col=0): row(row), col(col) {}
+
+  // TODO gli operatori sono da testare (a parte <<)
+  bool operator==(const Coordinate& p) const { return ((this->row == p.row) && (this->col == p.col)); }
+  bool operator!=(const Coordinate& p) const { return !(*this == p); }
+  bool operator<(const Coordinate& p) const { 
+    if(this->row < p.row) return true;
+    if( (this->row == p.row) && (this->col < p.col) ) return true; 
+    return false;
+  }
+  bool operator>(const Coordinate& p) const { return !(*this < p || *this == p); }
   friend std::ostream& operator<<(std::ostream& out, const Coordinate &c);
 };
 
@@ -61,6 +71,7 @@ private:
   Tile& getTileIn(Coordinate p);
   bool isWalkable(Coordinate p);
   bool isValid(Coordinate p) const;
+  double calcSpawnRate(const Tile& t) const;
 
 };
 

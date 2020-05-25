@@ -125,19 +125,22 @@ int main() {
   //map.printMap();
   cout << endl << endl;
 
-  map.setPos(Coordinate(10, 10));
+  map.setPos(Coordinate(40, 40));
   cout << "posizione nella Mappa: " << map.getPos() << endl;
   Map::printMap(map.getMiniMap(11), map.getRelativePos());
   //cout << "(" << map.getRelativePos().row << "," << map.getRelativePos().col << ")" << endl;
   //map.printMap();
 
-  //vector<Coordinate> line = map.createRectangle(map.getPos(), 1, 1);
-  //map.modifyTile(line, true, Desert);
+  vector<Coordinate> circle = map.createCircle(Coordinate(40,40), 20);
+  map.modifyTile(circle, true, Desert);
 
-  vector<Coordinate> line =  map.createLine(Coordinate(0,0), Coordinate(10,10), 1);
+  vector<Coordinate> rect = map.createRectangle(Coordinate(10,10), 10, 20);
+  map.modifyTile(rect, true, Valley);
+
+  vector<Coordinate>line =  map.createLine(Coordinate(10,10), Coordinate(40,40), 1);
   map.modifyTile(line, true, Street);
-  line =  map.createLine(Coordinate(0,1), Coordinate(10,11), 1);
-  map.modifyTile(line, true, Street);
+  //line =  map.createLine(Coordinate(1,0), Coordinate(1,10), 1);
+  //map.modifyTile(line, true, Street);
   cout << "stampo array: ";
   for(auto it = line.begin(); it != line.end(); ++it)
     cout << *it << " ";
@@ -156,7 +159,7 @@ int main() {
       default:  loop = false;     break;
     }
     //stampo la mappa
-    Map::printMap(map.getMiniMap(11), map.getRelativePos());
+    Map::printMap(map.getMiniMap(85), map.getRelativePos());
     cout << map.getPos() << endl;
     
     //Tile& t = map.getCurrentTile(); // debug
