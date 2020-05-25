@@ -6,7 +6,7 @@
 
 #include <iostream>
 
-enum Biome {Valley, Desert, Doungeon, Street};
+enum Biome {Valley, Desert, Doungeon, Street, Water};
 
 struct Coordinate {
   int row;
@@ -19,7 +19,7 @@ struct Tile {
   Entity* e;
   bool walkable;
   Biome biome;
-  Tile(bool w = true, Biome b = Valley, Entity* en = nullptr): walkable(w), biome(b), e(en) {}
+  Tile(bool w = false, Biome b = Valley, Entity* en = nullptr): walkable(w), biome(b), e(en) {}
 };
 
 class Map {
@@ -32,9 +32,10 @@ public:
   void moveRIGHT();
   Tile& getCurrentTile();
 
-  void createCircle(Coordinate center, int radius, Biome b); // va messa su private
-  void createRectangle(Coordinate center, int width, int height, Biome b); // va messa su private
-  void createLine(Coordinate start, Coordinate end, int thickness, Biome b); // va messa su private
+  std::vector<Coordinate> createCircle(Coordinate center, int radius); // va messa su private
+  std::vector<Coordinate> createRectangle(Coordinate center, int width, int height); // va messa su private
+  std::vector<Coordinate> createLine(Coordinate start, Coordinate end, int thickness); // va messa su private
+  void modifyTile(std::vector<Coordinate> points, bool w, Biome b); // va messa su private
   void Generatemap(); // va messa su private
 
   bool setPos(Coordinate newPos);
@@ -43,7 +44,7 @@ public:
 
   std::vector<std::vector<Tile>> getMiniMap(int size);
 
-  void printMap(std::vector<std::vector<Tile>> m) const;
+  static void printMap(std::vector<std::vector<Tile>> m, Coordinate pos);
 //qui giace la funzione pronta
 
 private:

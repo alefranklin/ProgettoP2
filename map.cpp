@@ -33,10 +33,12 @@ Map::Map(int d): pos() {
 // ritorna true se la posizione è stata settata
 // fasle altrimenti 
 bool Map::setPos(Coordinate newPos) {
-  if(isWalkable(newPos)) {
+  //if(isWalkable(newPos)) {
     changePos(newPos);
     return true;
-  } else return false;
+  //} else return false;
+
+  // TODO decommentare quando finito il dev // debug
 }
 
 Coordinate Map::getPos() const {
@@ -92,11 +94,11 @@ vector<vector<Tile>> Map::getMiniMap(int size) {
   return miniMap;
 } // funzione pronta
 
-void Map::printMap(vector<vector<Tile>> m) const {
+void Map::printMap(vector<vector<Tile>> m, Coordinate pos) {
   for(int row = 0; row < m.size(); row++){
     for(int col = 0; col < m[row].size(); col++){
-      if(row == relativePos.row && col == relativePos.col) cout << "#";
-      else cout << m[row][col].walkable;
+      if(row == pos.row && col == pos.col) cout << "#";
+      else cout << (m[row][col].walkable) ? "." : " ";
     }
     cout << endl;
   }
@@ -176,31 +178,32 @@ bool Map::isValid(Coordinate p) const {
   return (p.row < 0 || p.row >= dim || p.col < 0 || p.col >= dim ) ? false : true;
 }
 
-void Map::createCircle(Coordinate center, int radius, Biome b) {
-  /**
-   * controllo tutte le posizioni in una regione grande radius^2 x radius^2 con centro in center
-   * e controllo se fanno parte dell'area utilizzando la formula del cerchio 
-   */
+vector<Coordinate> Map::createCircle(Coordinate center, int radius) {
+  /* controllo tutte le posizioni in una regione grande radius^2 x radius^2 con centro in center
+     e controllo se fanno parte dell'area utilizzando la formula del cerchio */
+  vector<Coordinate> points;
+  
+  // il raggio deve essere >= 0
+  radius = (radius < 0) ? radius*(-1) : radius;
+
   // itero nell'area da controllare
   for(int i = center.row - radius; i <= center.row + radius; i++) {
     for(int j = center.col - radius; j <= center.col + radius; j++) {
       
       // utilizzo l'equazione del cerchio
       if((i-center.row)*(i-center.row) + (j-center.col)*(j-center.col) <= radius*radius) {
-        // modifico la cella
+        // se valida aggiungo la posizione alla lista dei punti selezionati
         Coordinate p(i,j);
-        if(isValid(p)) {
-          Tile &t = getTileIn(p);
-          t.walkable = true;
-          t.biome = b;
-        }
+        if(isValid(p)) points.push_back(p);
       }
 
     }
   }
+  return points;
 }
 
-void Map::createRectangle(Coordinate center, int width, int height, Biome b) {
+vector<Coordinate> Map::createRectangle(Coordinate center, int width, int height) {
+  vector<Coordinate> points;
 
   // itero nell'area da controllare
   for(int i = 0; i < height; i++) {
@@ -209,34 +212,57 @@ void Map::createRectangle(Coordinate center, int width, int height, Biome b) {
       int row = center.row - (height/2) + i;
       int col = center.col - (width/2) + j;
       
-      // modifico la cella
+      // se valida aggiongo la posizione alla lista di punti selezionati
       Coordinate p(row,col);
-      if(isValid(p)) {
-        Tile &t = getTileIn(p);
-        t.walkable = true;
-        t.biome = b;
-      }
+      if(isValid(p)) points.push_back(p);
+    }
+  }
+  return points;
+}
 
+vector<Coordinate> Map::createLine(Coordinate p1, Coordinate p2, int thickness) {
+  vector<Coordinate> points;
+
+  // variabili equazione retta
+  int A = p2.col - p1.col; 
+  int B = p1.row - p2.row; 
+  int C = A*(p1.row) + B*(p1.col);
+
+  cout << "r min: " << min(p1.row, p2.row) << " r max: " << max(p1.row, p2.row) << endl;
+  cout << "c min: " << min(p1.col, p2.col) << " c max: " << max(p1.col, p2.col) << endl;
+
+  for(int r = min(p1.row, p2.row); r <= max(p1.row, p2.row); r++) {
+    for(int c = min(p1.col, p2.col); c <= max(p1.col, p2.col); c++) {
+      if(B<0) {
+        // l'equazione è AxBy=C
+        if( (A*r) + (B*c) == C ) {
+          Coordinate p(r,c);
+          if(isValid(p)) points.push_back(p);
+        }
+      } else {
+        //l'equazione è Ax+By=C
+        if( (A*r) * (B*c) == C ) {
+          Coordinate p(r,c);
+          if(isValid(p)) points.push_back(p);
+        }
+      }
+    }
+  }
+  return points;
+      
+}
+
+void Map::modifyTile(vector<Coordinate> points, bool w, Biome b) {
+
+  for(auto it = points.begin(); it != points.end(); ++it) {
+    if(isValid(*it)) {
+      Tile &t = getTileIn(*it);
+      t.walkable = w;
+      t.biome = b;
     }
   }
 
-}
 
-void Map::createLine(Coordinate p1, Coordinate p2, int thickness, Biome b) {
-  int A = p2.col - p1.col; 
-  int B = p1.row - p2.row; 
-  int C = A*(p1.row) + B*(p1.col); 
-
-  if(B<0) 
-  { 
-    cout << "The line passing through points P and Q is: "
-        << A << "x " << B << "y = " << C << endl; 
-  } 
-  else
-  { 
-    cout << "The line passing through points P and Q is: "
-        << A << "x + " << B << "y = " << C << endl; 
-  } 
 }
 
 void Map::Generatemap() {

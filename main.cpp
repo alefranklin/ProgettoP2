@@ -125,15 +125,23 @@ int main() {
   //map.printMap();
   cout << endl << endl;
 
-  map.setPos(Coordinate(0, 0));
-  cout << map.getPos() << endl;
-  map.printMap(map.getMiniMap(11));
+  map.setPos(Coordinate(10, 10));
+  cout << "posizione nella Mappa: " << map.getPos() << endl;
+  Map::printMap(map.getMiniMap(11), map.getRelativePos());
   //cout << "(" << map.getRelativePos().row << "," << map.getRelativePos().col << ")" << endl;
   //map.printMap();
 
-  //map.createRectangle(map.getPos(), 4, 5, Desert);
+  //vector<Coordinate> line = map.createRectangle(map.getPos(), 1, 1);
+  //map.modifyTile(line, true, Desert);
 
-  map.createLine(Coordinate(0,0), Coordinate(5,5), 1, Street);
+  vector<Coordinate> line =  map.createLine(Coordinate(0,0), Coordinate(10,10), 1);
+  map.modifyTile(line, true, Street);
+  line =  map.createLine(Coordinate(0,1), Coordinate(10,11), 1);
+  map.modifyTile(line, true, Street);
+  cout << "stampo array: ";
+  for(auto it = line.begin(); it != line.end(); ++it)
+    cout << *it << " ";
+  cout << endl;
 
   char move;
   bool loop = true;
@@ -148,7 +156,7 @@ int main() {
       default:  loop = false;     break;
     }
     //stampo la mappa
-    map.printMap(map.getMiniMap(11));
+    Map::printMap(map.getMiniMap(11), map.getRelativePos());
     cout << map.getPos() << endl;
     
     //Tile& t = map.getCurrentTile(); // debug
