@@ -6,7 +6,7 @@
 
 #include <iostream>
 
-enum Biome {Valley, Desert, Doungeon, Street, Water};
+enum Biome {Valley, Desert, Doungeon, Street, Water, Null};
 
 struct Coordinate {
   int row;
@@ -29,7 +29,7 @@ struct Tile {
   Entity* e;
   bool walkable;
   Biome biome;
-  Tile(bool w = false, Biome b = Valley, Entity* en = nullptr): walkable(w), biome(b), e(en) {}
+  Tile(bool w = false, Biome b = Null, Entity* en = nullptr): walkable(w), biome(b), e(en) {}
 };
 
 class Map {
@@ -45,7 +45,7 @@ public:
   std::vector<Coordinate> createCircle(Coordinate center, int radius); // va messa su private
   std::vector<Coordinate> createRectangle(Coordinate center, int width, int height); // va messa su private
   std::vector<Coordinate> createLine(Coordinate start, Coordinate end, int thickness); // va messa su private
-  void modifyTile(std::vector<Coordinate> points, bool w, Biome b); // va messa su private
+  void modifyTile(std::vector<Coordinate> points, bool w, Biome b, bool overwrite = false); // va messa su private
   void Generatemap(); // va messa su private
 
   bool setPos(Coordinate newPos);
@@ -71,7 +71,10 @@ private:
   Tile& getTileIn(Coordinate p);
   bool isWalkable(Coordinate p);
   bool isValid(Coordinate p) const;
-  double calcSpawnRate(const Tile& t) const;
+  float calcSpawnRate(const Tile& t) const;
+
+  void generateOasi(Coordinate center, int minDim, int maxDim, bool overwrite = false);
+  void generateDesert(Coordinate center, int minDim, int maxDim, int maxOasis, bool overwrite = false);
 
 };
 

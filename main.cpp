@@ -131,6 +131,7 @@ int main() {
   //cout << "(" << map.getRelativePos().row << "," << map.getRelativePos().col << ")" << endl;
   //map.printMap();
 
+/*
   vector<Coordinate> circle = map.createCircle(Coordinate(40,40), 20);
   map.modifyTile(circle, true, Desert);
 
@@ -138,13 +139,12 @@ int main() {
   map.modifyTile(rect, true, Valley);
 
   vector<Coordinate>line =  map.createLine(Coordinate(10,10), Coordinate(40,40), 1);
-  map.modifyTile(line, true, Street);
+  map.modifyTile(line, true, Street, true);
   //line =  map.createLine(Coordinate(1,0), Coordinate(1,10), 1);
   //map.modifyTile(line, true, Street);
-  cout << "stampo array: ";
-  for(auto it = line.begin(); it != line.end(); ++it)
-    cout << *it << " ";
-  cout << endl;
+
+*/
+
 
   char move;
   bool loop = true;
@@ -159,7 +159,7 @@ int main() {
       default:  loop = false;     break;
     }
     //stampo la mappa
-    Map::printMap(map.getMiniMap(85), map.getRelativePos());
+    Map::printMap(map.getMiniMap(80), map.getRelativePos());
     cout << map.getPos() << endl;
     
     //Tile& t = map.getCurrentTile(); // debug

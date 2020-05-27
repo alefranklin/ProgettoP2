@@ -23,6 +23,8 @@ Map::Map(int d): pos() {
 
   // instanzio i vettori della mappa
   map = vector<vector<Tile>>(dim, vector<Tile>(dim, Tile()));
+
+  Generatemap();
   
   // costruisco la mappa
   //  -> creo spazi aperti
@@ -58,7 +60,7 @@ vector<vector<Tile>> Map::getMiniMap(int size) {
   // controllo se ho una grandezza sufficiente a creare una minimappa
   // in caso contrario ritorno tutta la mappa
   
-  if (size > dim) {
+  if (size >= dim) {
     changeRelativePos(pos);
     return map;
   }
@@ -102,7 +104,7 @@ void Map::printMap(vector<vector<Tile>> m, Coordinate pos) {
   for(int row = 0; row < m.size(); row++){
     for(int col = 0; col < m[row].size(); col++){
       if(row == pos.row && col == pos.col) cout << BLUE << "P" << RESET;
-      else if(m[row][col].walkable) {
+      else if(m[row][col].biome != Null) {
         switch (m[row][col].biome)
         {
         case Valley:    cout << GREEN << "\"" << RESET;     break;
@@ -297,21 +299,100 @@ vector<Coordinate> Map::createLine(Coordinate p1, Coordinate p2, int thickness) 
       
 }
 
-void Map::modifyTile(vector<Coordinate> points, bool w, Biome b) {
+void Map::modifyTile(vector<Coordinate> points, bool w, Biome b, bool overwrite) {
   for(auto it = points.begin(); it != points.end(); ++it) {
     if(isValid(*it)) {
       Tile &t = getTileIn(*it);
-      t.walkable = w;
-      t.biome = b;
+      // sovrawscrivo sempre se overWrite a true
+      // altrimenti solo se il bioma è Null
+      if(overwrite || t.biome == Null) {
+        t.walkable = w;
+        t.biome = b;
+      }
     }
   }
 }
 
-double Map::calcSpawnRate(const Tile& t) const {
+/* calcolo la percentuale di spawn in base al Bioma */
+float Map::calcSpawnRate(const Tile& t) const {
+  //se non ci posso andare laprobabilità di spawn è 0
+  if(t.walkable == false) return 0.0;
 
+  float rate = 0.1;
+  switch (t.biome)
+  {
+    case Valley:    rate = 0.1;  break;
+    case Desert:    rate = 0.2;  break;
+    case Doungeon:  rate = 0.4;  break;
+    case Street:    rate = 0.05; break;
+    default:        rate = 0.1;  break;
+  }
+  return rate;
+}
+
+void Map::generateOasi(Coordinate center, int minDim, int maxDim, bool overwrite) {
+  vector<Coordinate> oasi;
+  
+  // scelgo la forma
+  if( Randomizer::randomNumberBetween(0,100) <= 50 ) {
+
+    int radius = Randomizer::randomNumberBetween(minDim/2, maxDim/2);
+    oasi = createCircle(center, radius);
+  
+  } else {
+    
+    int w = Randomizer::randomNumberBetween(minDim, maxDim);
+    int h = Randomizer::randomNumberBetween(minDim, maxDim);
+    oasi = createRectangle(center, w, h);
+  
+  }
+  // aggiungo l'oasi 
+  modifyTile(oasi, true, Valley, overwrite);
+
+  // aggiungo l'acqua
+  modifyTile(vector<Coordinate>(1, center), true, Water, overwrite);
+}
+
+void Map::generateDesert(Coordinate center, int minDim, int maxDim, int maxOasis, bool overwrite) {
+  vector<Coordinate> desert;
+  bool oasis = true;
+  // scelgo la forma
+  if( Randomizer::randomNumberBetween(0,100) <= 50 ) {
+
+    int radius = Randomizer::randomNumberBetween(minDim, maxDim);
+    desert = createCircle(center, radius);
+    if(radius <= 10 ) oasis = false;
+  
+  } else {
+    
+    int w = Randomizer::randomNumberBetween(minDim, maxDim);
+    int h = Randomizer::randomNumberBetween(minDim, maxDim);
+    desert = createRectangle(center, w, h);
+    if(w*h <= 30) oasis = false;
+  
+  }
+  // aggiungo il deserto  
+  modifyTile(desert, true, Desert, overwrite);
+
+  if(oasis) {
+    // aggiungo le oasi
+    for(int i = 0; i < Randomizer::randomNumberBetween(0, maxOasis); i++) {
+      Coordinate oasi = desert[ Randomizer::randomNumberBetween(0, desert.size()-1) ];
+      generateOasi(oasi, 4, 12, true);
+    }
+  }
 }
 
 void Map::Generatemap() {
+
+  vector<Coordinate> centers;
+
+  Coordinate center = Coordinate(40, 40); //TODO implementare GetRandomNullPos()
+  centers.push_back(center);
+
+  generateDesert(center, 20, 80, 4, true);
+
+
   /**
    * chiama combinazioni casuali di forme geometriche intercconnesse da linee
    * che si differenziano per biomi
