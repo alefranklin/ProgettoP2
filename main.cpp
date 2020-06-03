@@ -13,7 +13,7 @@ int main() {
   //parte dediucata a Item
   cout << "TEST DELLE CLASSI ITEM" << endl;
 
-  Character *T = new Player(40, 1000, 200);
+  Character *T = new Player(1000, 200);
 
   Attribute att1("hello", "20");
   Attribute att2("hello", "21");
@@ -24,10 +24,10 @@ int main() {
 
   //Item *a = new Item();         // la classe Item non è istanziabile
   //Item *b = new Weapon(3, 100);
-  Item *c = new Potion(5, 500);
-  Item *d = new MagicWeapon(10, 100, 300, 10);
+  Item *c = new Potion(500);
+  Item *d = new MagicWeapon(100, 300, 10);
   //Item *e = new MeleeMagic(15, 50, 200);
-  Armor *g = new Armor(8, 100);
+  Armor *g = new Armor(100);
 
   cout << endl << endl;
 
@@ -78,8 +78,8 @@ int main() {
   cout << endl << endl;
   cout << "TEST DELLE CLASSI CHARACTER" << endl;
 
-  Character *pg = new Player(1,500, 200);
-  Character *m = new Mob(2, 300, 100);
+  Character *pg = new Player(500, 200);
+  Character *m = new Mob(300, 100);
   cout << endl;
 
   pg->info();
@@ -109,7 +109,7 @@ int main() {
   // parte dedicata a game
   cout << endl << endl;
   cout << "TEST DELLE CLASSE GAME - TYPE CHECKING" << endl;
-  Entity *e = new Sword(100, 3, 2);
+  Entity *e = new Sword(3, 2);
   cout << "item?: " << Game::isItem(e) << endl;
   cout << "Weapon?: " << Game::isWeapon(e) << endl;
   cout << "character?: " << Game::isCharacter(e) << endl;
@@ -148,6 +148,9 @@ int main() {
   char move;
   bool loop = true;
   while(loop) {
+
+      Map::printMap(map.getMiniMap(10), map.getRelativePos());
+  cout << map.getPos() << endl;
     cout << "w: UP\ns: DOWN\na: LEFT\nd: RIGHT\nx: EXIT" << endl << "la tua mossa:";
     cin >> move;
     switch (move) {
@@ -158,8 +161,7 @@ int main() {
       default:  loop = false;     break;
     }
     //stampo la mappa
-    Map::printMap(map.getMiniMap(80), map.getRelativePos());
-    cout << map.getPos() << endl;
+
     
     //Tile& t = map.getCurrentTile(); // debug
     //t.walkable = false; //debug

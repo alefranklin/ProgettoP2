@@ -45,7 +45,7 @@ class Potion: public Item {
 private:
  int effect;
 public:
- Potion(int id, int e);
+ Potion(int e);
  virtual ~Potion();
  virtual void use();
  virtual void save();
@@ -62,7 +62,7 @@ class Weapon: virtual public Item {
 private:
   int damage;
 protected:  
-  Weapon(int id, int d);
+  Weapon(int d);
 public:
   virtual ~Weapon();
   int getDamage();
@@ -75,7 +75,7 @@ class Sword : virtual public Weapon {
   private:
     int range;
   public:
-    Sword(int id, int d, int r);
+    Sword(int d, int r);
     int getRange();
     virtual void use();
 };
@@ -84,7 +84,7 @@ class Bow : virtual public Weapon {
   private:
     int arrows;
   public:
-    Bow(int id, int d, int r);
+    Bow(int d, int r);
     int getArrow();
     virtual void use();
 };
@@ -94,7 +94,7 @@ private:
   int effect;
   int mana;
 protected:
-  Magic(int id, int e, int m);
+  Magic(int e, int m);
 public:
   virtual ~Magic();
   int getEffect();
@@ -108,7 +108,7 @@ public:
 
 class MagicWeapon: virtual public Weapon, virtual public Magic {
 public:
-  MagicWeapon(int id, int d, int e, int m);
+  MagicWeapon(int d, int e, int m);
   virtual ~MagicWeapon();
   virtual void use();
   virtual void save();
@@ -119,7 +119,7 @@ class Armor: virtual public Item {
 private:
  int armatura;
 public:
- Armor(int id, int a);
+ Armor(int a);
  virtual ~Armor();
  virtual int absorb(int danno);
  //virtual void use();
@@ -129,7 +129,7 @@ public:
 
 class Chest : virtual public Armor{
 public:
-  Chest(int id, int c);
+  Chest(int c);
   virtual ~Chest();
   //virtual int absorb(int danno); //eredita da armor
   //virtual void use();
@@ -139,7 +139,7 @@ public:
 
 class Boots : virtual public Armor {
   public:
-    Boots(int id, int a);
+    Boots(int a);
     virtual ~Boots();
     virtual void save();
 

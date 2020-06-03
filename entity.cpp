@@ -3,7 +3,6 @@
 using namespace std;
 
 
-Entity::Entity(int i): id(i) {}
-Entity::~Entity() { cout << "elimino Entity:" << getId() << endl; } //=default;
-int Entity::getId() { return id; }
+Entity::Entity(){}
+Entity::~Entity() { cout << "elimino Entity:" << endl; } //=default;
 

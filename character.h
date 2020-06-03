@@ -16,7 +16,7 @@ private:
   Weapon* arma;
   Armor* armatura;
 protected:
-  Character(int i, int v, int m);
+  Character(int v, int m);
 public:
   virtual void save() =0;
   int getVita();
@@ -29,7 +29,7 @@ public:
 
 class Player: public Character {
 public:
-  Player(int i, int v, int m);
+  Player(int v, int m);
   virtual void save();
   void info();
   bool isAlive();
@@ -37,7 +37,7 @@ public:
 
 class Mob: public Character {
 public:
-  Mob(int i, int v, int m);
+  Mob(int v, int m);
   virtual void save();
   void info();
   bool isAlive();
