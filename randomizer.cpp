@@ -19,7 +19,7 @@ void Randomizer::setSeed(unsigned int s) { seed = s; srand(s); } //funzione pron
 
 int Randomizer::randomNumberBetween(int min, int max) {
   return min+(rand()%(max-min+1));
-} //fatta a cazzo da definire
+} 
 
 //Item* Randomizer::getRandomItem(int livello) {/*chiamare casualmente o randomWeapon o randonArmor o potion o altri item istanziabili*/}
 

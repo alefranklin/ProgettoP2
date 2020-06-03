@@ -125,7 +125,6 @@ int main() {
   //map.printMap();
   cout << endl << endl;
 
-  map.setPos(Coordinate(40, 40));
   cout << "posizione nella Mappa: " << map.getPos() << endl;
   Map::printMap(map.getMiniMap(11), map.getRelativePos());
   //cout << "(" << map.getRelativePos().row << "," << map.getRelativePos().col << ")" << endl;

@@ -238,52 +238,66 @@ vector<Coordinate> Map::createRectangle(Coordinate center, int width, int height
 vector<Coordinate> Map::createLine(Coordinate p1, Coordinate p2, int thickness) {
   vector<Coordinate> line;
 
-  // variabili equazione retta
-  int A = p2.col - p1.col; 
-  int B = p1.row - p2.row; 
-  int C = A*(p1.row) + B*(p1.col);
+  /*
+  if(p1 > p2){
+    Coordinate temp = p1;
+    p1 = p2;
+    p2 = temp;
+  }
+  */
 
-  cout << "r min: " << min(p1.row, p2.row) << " r max: " << max(p1.row, p2.row) << endl;
-  cout << "c min: " << min(p1.col, p2.col) << " c max: " << max(p1.col, p2.col) << endl;
+  // utilizziamo l'algoritmo di bresenham per calcolare la linea
+  
+  int dx = p2.row - p1.row;
+  int ix((dx > 0) - (dx < 0));
+  dx = abs(dx) << 1;
 
-  for(int r = min(p1.row, p2.row); r <= max(p1.row, p2.row); r++) {
-    for(int c = min(p1.col, p2.col); c <= max(p1.col, p2.col); c++) {
+  int dy = p2.col - p1.col;
+  int iy((dy > 0) - (dy < 0));
+  dy = abs(dy) << 1;
 
-      if( (A*r) + (B*c) == C ) {
-          Coordinate p(r,c);
-          if(isValid(p)) line.push_back(p);
+  line.push_back(p1);
+
+  if (dx >= dy) {
+    // error may go below zero
+    int error(dy - (dx >> 1));
+
+    while (p1.row != p2.row)
+    {
+      if ((error >= 0) && (error || (ix > 0))) {
+          error -= dx;
+          p1.col += iy;
       }
+      // else do nothing
 
-      // forse non serve
-      /*
-      if(B<0) {
-        // l'equazione è AxBy=C
-        if( (A*r) + (B*c) == C ) {
-          Coordinate p(r,c);
-          if(isValid(p)) points.push_back(p);
-        }
-      } else {
-        //l'equazione è Ax+By=C
-        if( (A*r) * (B*c) == C ) {
-          Coordinate p(r,c);
-          if(isValid(p)) points.push_back(p);
-        }
-      } */
+      error += dy;
+      p1.row += ix;
 
+      line.push_back(p1);
+    }
+  } else {
+    // error may go below zero
+    int error(dx - (dy >> 1));
 
+    while (p1.col != p2.col){
+      if ((error >= 0) && (error || (iy > 0))) {
+          error -= dy;
+          p1.row += ix;
+      }
+      // else do nothing
+
+      error += dx;
+      p1.col += iy;
+
+      line.push_back(p1);
     }
   }
 
-  // thickness deve essere >= 1
-  if(thickness <= 0) thickness = 1;
 
-  // se la linea è obliqua per potermi muovere devo avere uno spessore almeno di 2
-  if ( ((p1.row != p2.row) or (p1.col != p2.col)) && thickness == 1) thickness = 1;
+  // thickness deve essere >= 2
+  if(thickness <= 1) thickness = 2;
 
-  // se thickness è 1 allora non devo fare altro
-  if(thickness == 1) return line; 
-
-  // se tickness è > 1 ingrosso la linea
+  //ingrosso la linea
   vector<Coordinate> points;
   for(auto it = line.begin(); it != line.end(); ++it) {
     // creo un quadrato di dimensione thicknessxthickness intorno ad ogni punto della linea
@@ -348,9 +362,10 @@ void Map::generateOasi(Coordinate center, int minDim, int maxDim, bool overwrite
   }
   // aggiungo l'oasi 
   modifyTile(oasi, true, Valley, overwrite);
-
+  
   // aggiungo l'acqua
-  modifyTile(vector<Coordinate>(1, center), true, Water, overwrite);
+  modifyTile(vector<Coordinate>(1, center), false, Water, overwrite);
+
 }
 
 void Map::generateDesert(Coordinate center, int minDim, int maxDim, int maxOasis, bool overwrite) {
@@ -368,9 +383,10 @@ void Map::generateDesert(Coordinate center, int minDim, int maxDim, int maxOasis
     int w = Randomizer::randomNumberBetween(minDim, maxDim);
     int h = Randomizer::randomNumberBetween(minDim, maxDim);
     desert = createRectangle(center, w, h);
-    if(w*h <= 30) oasis = false;
+    if(w*h <= 400) oasis = false;
   
   }
+
   // aggiungo il deserto  
   modifyTile(desert, true, Desert, overwrite);
 
@@ -378,30 +394,119 @@ void Map::generateDesert(Coordinate center, int minDim, int maxDim, int maxOasis
     // aggiungo le oasi
     for(int i = 0; i < Randomizer::randomNumberBetween(0, maxOasis); i++) {
       Coordinate oasi = desert[ Randomizer::randomNumberBetween(0, desert.size()-1) ];
-      generateOasi(oasi, 4, 12, true);
+      generateOasi(oasi, 2, 5, true);
+    }
+  }  
+}
+
+
+void Map::generateLake(Coordinate center, int minDim, int maxDim, bool overwrite) {
+  vector<Coordinate> lake;
+  
+  int radius = Randomizer::randomNumberBetween(minDim/2, maxDim/2);
+  lake = createCircle(center, radius);
+
+  // aggiungo lago 
+  modifyTile(lake, false, Water, overwrite);
+
+}
+
+/**
+ * @brief 
+ * 
+ * @param 
+ * @return 
+ */
+void Map::generateValley(Coordinate center, int minDim, int maxDim, int maxLakes, bool overwrite) {
+  vector<Coordinate> valley;
+  bool lake = true;
+  // scelgo la forma
+  if( Randomizer::randomNumberBetween(0,100) <= 50 ) {
+
+    int radius = Randomizer::randomNumberBetween(minDim, maxDim);
+    valley = createCircle(center, radius);
+    if(radius <= 10 ) lake = false;
+  
+  } else {  
+    int w = Randomizer::randomNumberBetween(minDim, maxDim);
+    int h = Randomizer::randomNumberBetween(minDim, maxDim);
+    valley = createRectangle(center, w, h);
+    if(w*h <= 400) lake = false;
+  
+  }
+
+  // aggiungo valle
+  modifyTile(valley, true, Valley, overwrite);
+
+  if(lake){
+    // aggiungo laghi
+    for(int i = 0; i < Randomizer::randomNumberBetween(0, maxLakes); i++) {
+      Coordinate lake = valley[ Randomizer::randomNumberBetween(0, valley.size()-1) ];
+      generateLake(lake, 3, 6, true);
     }
   }
 }
 
+/**
+ * @brief ritorna una coordinata casuale della mappa in cui è presente il bioma b
+ * 
+ * @param Biome b: bioma da ricercare
+ * @return Coordinate
+ */
+Coordinate Map::getRandomPos(Biome b){
+  vector<Coordinate> v;
+  for(int r = 0; r < dim; r++) {
+    for(int c = 0; c < dim; c++) {
+      Coordinate p(r,c);
+      if(getTileIn(p).biome == b) v.push_back(p);
+    }
+  }
+
+  return v[ Randomizer::randomNumberBetween(0, v.size()-1) ];
+
+}
+
+
+/**
+ * chiama combinazioni casuali di forme geometriche
+ * che si differenziano per biomi
+ * 
+ * le linee collegano i centri di generazione di ogni forma geomtrica
+ * e rappresentano 
+ * 
+ * si possono fare vallate
+ * deserti giganti con oasi in mezzo
+ * 
+ * magari prevedere un modo di generare acqua o lava rendendo decidibile anche il walkable oltre al bioma
+ */
 void Map::Generatemap() {
 
   vector<Coordinate> centers;
 
-  Coordinate center = Coordinate(40, 40); //TODO implementare GetRandomNullPos()
-  centers.push_back(center);
+  int maxNumPerBioma = 5;
+  Coordinate center;
 
-  generateDesert(center, 20, 80, 4, true);
+  //generate [1..maxNumPerBioma] desert
+  for(int i = 0; i < Randomizer::randomNumberBetween(1, maxNumPerBioma); ++i){
+    center = getRandomPos(Null);
+    centers.push_back(center);
+    generateDesert(center, 15, 25, 4, true);
+  }
 
+  //generate [1..maxNumPerBioma] valley
+  for(int i = 0; i < Randomizer::randomNumberBetween(1, maxNumPerBioma); ++i){
+    center = getRandomPos(Null);
+    centers.push_back(center);
+    generateValley(center, 15, 25, 4, true);
+  }
+  
+  // creo le strade di collegamento tra i centri dei vari biomi
+  for(int i = 0; i < centers.size()-1; i++) {
+    vector<Coordinate> line = createLine(centers[i], centers[i+1], 2);
+    modifyTile(createLine(centers[i], centers[i+1]), true, Street, true);
+  }
+  modifyTile(createLine(centers[0], centers[centers.size()-1]), true, Street, true);
+  
 
-  /**
-   * chiama combinazioni casuali di forme geometriche intercconnesse da linee
-   * che si differenziano per biomi
-   * le linee sono le strade
-   * 
-   * si possono fare vallate
-   * 
-   * deserti giganti con oasi in mezzo
-   * 
-   * magari prevedere un modo di generare acqua o lava rendendo decidibile anche il walkable oltre al bioma
-   */
+  //modifyTile(createLine(Coordinate(40,40), Coordinate(79,20)), true, Street, true);  //debug
 }

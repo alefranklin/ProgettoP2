@@ -44,7 +44,8 @@ public:
 
   std::vector<Coordinate> createCircle(Coordinate center, int radius); // va messa su private
   std::vector<Coordinate> createRectangle(Coordinate center, int width, int height); // va messa su private
-  std::vector<Coordinate> createLine(Coordinate start, Coordinate end, int thickness); // va messa su private
+  //std::vector<Coordinate> createRand(Coordinate center, int width, int height); // va messa su private
+  std::vector<Coordinate> createLine(Coordinate start, Coordinate end, int thickness = 2); // va messa su private
   void modifyTile(std::vector<Coordinate> points, bool w, Biome b, bool overwrite = false); // va messa su private
   void Generatemap(); // va messa su private
 
@@ -73,9 +74,14 @@ private:
   bool isValid(Coordinate p) const;
   float calcSpawnRate(const Tile& t) const;
 
+
   void generateOasi(Coordinate center, int minDim, int maxDim, bool overwrite = false);
   void generateDesert(Coordinate center, int minDim, int maxDim, int maxOasis, bool overwrite = false);
+  void generateLake(Coordinate center, int minDim, int maxDim, bool overwrite = false);
+  void generateValley(Coordinate center, int minDim, int maxDim, int maxLake, bool overwrite = false);
 
+  Coordinate getRandomPos(Biome b);
+  
 };
 
 #endif
